@@ -48,6 +48,7 @@ void loop() {
         }
         else {
             pwm = rec.toInt();
+            pwm = constrain(pwm, 0, 255);
             drive(pwm, dir);
         }
 
