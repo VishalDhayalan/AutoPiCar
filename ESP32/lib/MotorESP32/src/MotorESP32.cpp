@@ -23,16 +23,9 @@ Motor::Motor(int pwm_channel, int pwm_pin, int IN1_pin, int IN2_pin, int enc_pin
 }
 
 void IRAM_ATTR Motor::encoder_ISR() {
-    // If output shaft is yet to make another full revolution...
-    if (enc_pulses < int(_PPR * reduction_ratio)) {
-        enc_pulses++;               // ...Increment number of encoder pulses by 1
-    }
-    // Else use time period of revolution to calculate RPM
-    else {
-        RPM = 60000000.0 / (micros()-enc_time);
-        enc_time = micros();        // Set encoder timer to current time (for use in next revolution)
-        enc_pulses = 0;             // Reset encoder pulses to 0
-    }
+    // Calculate RPM using frequency of encoder pulse (derived from the time period of each pulse)
+    RPM = 60000000.0 / ((micros() - enc_time) * _PPR * reduction_ratio);
+    enc_time = micros();                // Set encoder pulse timestamp
 }
 
 // Drive motor forwards at set PWM duty cycle
@@ -53,16 +46,16 @@ void Motor::reverse(int pwm_speed) {
 void Motor::coast() {
     digitalWrite(IN1, LOW);
     digitalWrite(IN2, LOW);
-    ledcWrite(pwm_ch, 0);           // Set PWM duty cycle to 0
+    ledcWrite(pwm_ch, 0);               // Set PWM duty cycle to 0
 }
 
 // Actively brake motors to a halt
 void Motor::brake() {
     digitalWrite(IN1, HIGH);
     digitalWrite(IN2, HIGH);
-    ledcWrite(pwm_ch, 0);           // Set PWM duty cycle to 0
+    ledcWrite(pwm_ch, 0);               // Set PWM duty cycle to 0
 }
 
 float Motor::getRPM() {
-    return RPM;                     // Return RPM
+    return RPM;                         // Return RPM
 }

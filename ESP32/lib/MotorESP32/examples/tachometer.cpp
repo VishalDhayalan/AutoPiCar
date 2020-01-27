@@ -6,6 +6,7 @@ Motor drive_L = Motor(1, 5, 16, 17, 34, 11, 34.02);        // Left drive channel
 
 String dir = "fwd", rec;
 int pwm = 0;
+long timestamp;
 
 void drive(int pwm_val, String direction) {
     if (direction == "fwd") {
@@ -22,6 +23,7 @@ void drive(int pwm_val, String direction) {
 
 void setup() {
     Serial.begin(115200);
+    timestamp = millis();
 }
 
 void loop() {
@@ -54,5 +56,8 @@ void loop() {
 
     }
 
-    Serial.println((String)"PWM: " + pwm + "\tLeft RPM: " + drive_L.getRPM() + "\tRight RPM: " + drive_R.getRPM());
+    if (millis() - timestamp >= 50) {       // Only print every 50ms (i.e. at 20 Hz)
+        Serial.println((String)"PWM: " + pwm + "\tLeft RPM: " + drive_L.getRPM() + "\tRight RPM: " + drive_R.getRPM());
+        timestamp = millis();
+    }
 }
