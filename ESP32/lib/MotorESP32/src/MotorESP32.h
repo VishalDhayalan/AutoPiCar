@@ -15,8 +15,8 @@ class Motor {
         volatile uint16_t enc_timeBuffer[encoderBufferSize] = {};       // Circular buffer used to store period of encoder pulses (initialised with zeros)
         bool bufferInitialised = false;                                 // Flag indicating buffer filled with measured values (i.e all zeros replaced)
 
-        void IRAM_ATTR encoder_ISR();                       // Interrupt Service Routine for calculating RPM using motor encoder
-        uint16_t IRAM_ATTR updateBuffer(uint16_t value);    // Returns and replaces oldest value in encoder buffer with new measurement
+        void IRAM_ATTR encoder_ISR();                                   // Interrupt Service Routine for calculating RPM using motor encoder
+        uint16_t IRAM_ATTR updateBuffer(uint16_t value);                // Returns and replaces oldest value in encoder buffer with new measurement
 
     public:
         Motor(int pwm_channel, int pwm_pin, int IN1_pin, int IN2_pin, int enc_pin, int PPR, double ratio);
@@ -24,6 +24,6 @@ class Motor {
         void reverse(int pwm_speed);
         void coast();
         void brake();
-        double IRAM_ATTR getRPM();
+        double getRPM();
 };
 #endif

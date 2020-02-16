@@ -33,6 +33,14 @@ uint16_t IRAM_ATTR Motor::updateBuffer(uint16_t value) {
 void IRAM_ATTR Motor::encoder_ISR() {
     volatile unsigned long now = micros();                      // Current timestamp (number of microsecs since start of execution)
     volatile int new_period = now - enc_time;                   // Calculate time period of pulse
+
+    if (new_period > 10000) {
+        bufferInitialised = false;
+        bufferIndex = 0;
+        enc_time = now;
+        return;
+    }
+
     volatile int old_period = updateBuffer(now - enc_time);     // Replace oldest period with new period
 
     if (bufferInitialised) {
@@ -82,6 +90,9 @@ void Motor::brake() {
     ledcWrite(pwm_ch, 0);               // Set PWM duty cycle to 0
 }
 
-double IRAM_ATTR Motor::getRPM() {
+double Motor::getRPM() {
+    if (micros() - enc_time > 15000) {
+        RPM = 0.0;
+    }
     return RPM;                         // Return RPM
 }
