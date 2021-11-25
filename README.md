@@ -1,5 +1,5 @@
 # AutoPiCar
-A vision-based Raspberry Pi self-driving car project  
+A Computer Vision based Raspberry Pi self-driving car project capable of navigating straight lanes, hairpin bends and 45 degree turns while detecting and responding to road signs, pedestrian crossings and obstacles in real-time.
 
 ## Main Components
 * Raspberry Pi 3B+
