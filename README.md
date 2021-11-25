@@ -1,6 +1,5 @@
 # AutoPiCar
 A vision-based Raspberry Pi self-driving car project  
-**Please note:** This project is still being developed and is at its early stages!
 
 ## Main Components
 * Raspberry Pi 3B+
